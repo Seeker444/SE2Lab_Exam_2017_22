@@ -35,6 +35,56 @@ describe("Test /showDisks", function() {
     }); 
 });
 
+//Test for /searchDisk
+describe("Test /searchDisk", function() {	
+	//legal request
+	var data = {
+			ID: 3
+    };
+    
+    var dateCheck= new Date(2012, 11, 22, 0, 0, 0, 0).toISOString();
+    
+	it("to return status code 200", function(done) {
+	  client.post(base_url + "searchDisk/", data, function(err, res, body) {
+          expect(body).toEqual(
+
+                [
+                    {
+                        ID: 3,
+                        price: 13,
+                        quantity: 50,
+                        genre: "rap",
+                        date: dateCheck
+                    }
+                ]
+		);
+		done();
+	  });
+	});
+	
+
+	//item non existing
+	var data1 = {
+            ID: 11
+    };
+	it("to return status code 400", function(done) {
+	  client.post(base_url + "searchDisk/", data1, function(err, res, body) {
+		expect(res.statusCode).toBe(400);
+		done();
+	  });
+	});
+	
+	//wrong parameter
+	var data2 = {code: "1" };
+	it("to return status code 406", function(done) {
+	  client.post(base_url + "searchDisk/", data2, function(err, res, body) {
+		expect(res.statusCode).toBe(406);
+		expect(body).toBe(1);
+		done();
+	  });
+	});	
+	
+});
 
 //Test for /sellDisk
 describe("Test /sellDisk", function() {	
