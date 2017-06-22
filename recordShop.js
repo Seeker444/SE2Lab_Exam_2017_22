@@ -106,7 +106,48 @@ var remaster = function remaster(item)
         return null;
 }
 
+/**
+ * @brief This function sells an element and applies a reduction on the price.
+ * @param itemID
+ * @return the item with the reduction applied
+ */
+var sell = function sell(item)
+{
+    //search for the element
+    var position = searchPos(item.ID);
+    
+    if (position!=null)
+        {
+            var actualDate= new Date();
+            var timeOfDisk=(actualDate-disks[position].date)/(24*3600*1000);
+            var priceReduction=(0.001*timeOfDisk)/100;
+            disk[position].price=disk[position].price-priceReduction;
+            item.quantity=item.quantity-1;
+            return disks[position];
+        }
+    else
+        return null;
+}
+
+/** 
+ * @brief it searches all disks with a specific genre
+ * @param genre
+ * @return the elements searched
+ */
+var searchSimilarDisk = function searchSimilarDisk(genre)
+{
+    //search for the genre
+    for (i=0; i < disks.length; i++)
+	{
+		if (disks[i].genre == genre)
+		{
+			return i;
+		}
+}
+
 //export functions
 exports.getDisks = getDisks; 
 exports.searchDisk = searchDisk; 
 exports.remaster = remaster; 
+exports.sell = sell;
+exports.searchSimilarDisk = searchSimilarDisk;
